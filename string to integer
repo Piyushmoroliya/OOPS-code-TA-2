@@ -1,0 +1,44 @@
+public class Solution {
+    public int myAtoi(String s) {
+        // Step 1: Trim leading whitespaces
+        s = s.trim();
+        
+        // Step 2: Handle edge case for empty string
+        if (s.length() == 0) {
+            return 0;
+        }
+
+        // Step 3: Initialize the result and sign
+        int result = 0;
+        int sign = 1;
+        int index = 0;
+
+        // Step 4: Check if the first character is '+' or '-'
+        if (s.charAt(index) == '-') {
+            sign = -1;
+            index++;
+        } else if (s.charAt(index) == '+') {
+            index++;
+        }
+
+        // Step 5: Process the numeric part of the string
+        while (index < s.length()) {
+            char c = s.charAt(index);
+            if (c < '0' || c > '9') {
+                break;  // Non-digit character encountered
+            }
+
+            int digit = c - '0';
+
+            // Step 6: Handle overflow or underflow
+            if (result > Integer.MAX_VALUE / 10 || (result == Integer.MAX_VALUE / 10 && digit > Integer.MAX_VALUE % 10)) {
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+
+            result = result * 10 + digit;
+            index++;
+        }
+
+        return result * sign;
+    }
+}
