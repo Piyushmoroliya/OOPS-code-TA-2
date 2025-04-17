@@ -1,0 +1,32 @@
+public class Solution {
+    public boolean isMatch(String s, String p) {
+        // DP table to store results of subproblems
+        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
+
+        // Initial condition: empty pattern matches empty string
+        dp[0][0] = true;
+
+        // Fill the DP table
+        for (int j = 1; j <= p.length(); j++) {
+            if (p.charAt(j - 1) == '*') {
+                dp[0][j] = dp[0][j - 2];
+            }
+        }
+
+        // Fill the table for the rest of the cases
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= p.length(); j++) {
+                char sc = s.charAt(i - 1);
+                char pc = p.charAt(j - 1);
+
+                if (pc == sc || pc == '.') {
+                    dp[i][j] = dp[i - 1][j - 1]; // If characters match or pc is '.'
+                } else if (pc == '*') {
+                    dp[i][j] = dp[i][j - 2] || (dp[i - 1][j] && (sc == p.charAt(j - 2) || p.charAt(j - 2) == '.'));
+                }
+            }
+        }
+
+        return dp[s.length()][p.length()];
+    }
+}
